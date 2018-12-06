@@ -1,0 +1,67 @@
+{% extends 'base/base.html' %}
+{% block head %}
+    <div class="col-md-3"></div>
+    <div class="col-md-6 up-m">
+        <center>
+                <h1 class="fonttitle">Loft Blog</h1>
+        </center>
+           </div>
+    <div class="col-md-3"></div>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="row up backcolor">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10 up">
+                <h2>{{ post.title }}</h2>
+                {{momentjs(post.timestamp).format('LLLL')}}</div>
+            <div class="col-lg-1"></div>
+        </div>
+        <div class="row down mleft mright backcolor">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-10 down">
+                {{ post.body | safe }}
+                <br>
+            </div>
+            <div class="col-lg-1"></div>
+        </div>
+        <div class="row backcolor">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+            <h2>Comments</h2>
+            <div class="container-fluid">
+            {% for comment in comments %}
+                <p><img src="{{ comment.user.avatar(32) }}">
+                    <a href="{{ url_for('user', username=comment.user.username) }}">{{ comment.user.username }}</a>
+                    {{ comment.date }}</p>
+            <p>{{ comment.text }}</p>
+           {% endfor %}
+           </div>
+            <hr>
+
+            <h3>New Comment:</h3>
+            <div class="container-fluid">
+            <!-- Set the form -->
+            {% if current_user.username %}
+            <form method="POST" action="{{ url_for('post', post_id=post.id)}}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.text.label }} {% if form.text.errors %} {% for e in form.text.errors %}
+                    <p class="help-block">{{ e }}</p>
+                    {% endfor %} {% endif %} {{ form.text(class_='form-control',rows_="3") }}
+                </div>
+                <input class="btn btn-primary" type="submit" value="Add Comment">
+            </form>
+            {% else %}
+            <p>login need</p>
+            {% endif %}
+        </div>
+        </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+{% endblock %}

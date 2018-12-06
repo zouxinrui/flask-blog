@@ -1,0 +1,68 @@
+{% extends 'base/base.html' %}
+{% block head %}
+    <div class="col-md-3"></div>
+    <div class="col-md-6 up-max">
+        <center>
+                <h1>Loft Blog</h1>
+        </center>
+           </div>
+    <div class="col-md-3"></div>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-1"></div>
+    <div class="col-md-3">
+           <div class="container-fluid postcolor up">
+            <div class="container up down">
+      <h3>Recent Posts</h3>
+        {% for post in recent %}
+        <!-- Set the link for recent posts. -->
+        <a href="{{
+          url_for('post', post_id=post.id)
+          }}">{{ post.title }}</a>
+          <br>
+        {% endfor %}
+    </div>
+        </div>
+           <div class="container-fluid postcolor up">
+            <div class="container up down">
+      <h3>Popular Tags</h3>
+        {% for tag in top_tags %}
+        <p><a href="{{
+          url_for('tag', tag_name=tag[0].name)
+          }}"><span class="glyphicon glyphicon-tag" > {{ tag[0].name }}</span></a></p>
+        {% endfor %}
+    </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        {% for post in posts %}
+        <div class="container-fluid postcolor up">
+           <div class="container-fluid">
+            <div class="row mleft mright">
+                <div class="col-lg-12">
+                    <h2>{{ post.title }}</h2>
+                    <p>author: <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a> | {{momentjs(post.timestamp).format('LLLL')}}</p>
+                    <hr>
+                </div>
+            </div>
+            <div class="row down mleft mright">
+                <div class="col-lg-12">
+                    {{ post.body | truncate(225) | safe }}
+                    <br>
+                    <br>
+                    <!-- Set the link for read more -->
+            </div>
+                <div class="col-lg-12">
+               <p class="text-right"> <a href="{{
+          url_for('post', post_id=post.id)
+          }}" class="btn btn-default">Read More</a></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+     {% endfor %}
+     <div class="col-md-1"></div>
+</div>
+{% endblock %}

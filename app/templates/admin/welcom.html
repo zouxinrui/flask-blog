@@ -1,0 +1,33 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+<div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="container-fluid" style="background-color:#f0f0f0;margin-bottom:20px;">
+                <h3>Background management system</h3>
+                <br>
+                <h4>Welcome! Administrator</h4>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="container-fluid" style="background-color:#f0f0f0">
+                <center><h3>User statistics</h3>
+                <hr>
+                <h3>{{ users }}</h3></center>
+            </div>
+            <div class="container-fluid" style="background-color:#e6e6e6;margin-top:10px;">
+                <center><h3>Posts statistics</h3>
+                <hr>
+                <h3>{{ posts }}</h3></center>
+            </div>
+            <div class="container-fluid" style="background-color:rgba(0,0,0,.1);margin-top:10px;margin-bottom:20px;">
+                <center><h3>Comment statistics</h3>
+                <hr>
+                <h3>{{ tags }}</h3></center>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
