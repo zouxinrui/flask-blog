@@ -36,7 +36,7 @@ class User(UserMixin, db.Model):
         lazy='dynamic', cascade="all, delete, delete-orphan", passive_deletes = True)
 
     def __repr__(self):
-        return '<Username:{}>'.format(self.username)
+        return 'User:{}'.format(self.username)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -69,7 +69,7 @@ class Post(db.Model):
         backref=db.backref('posts', lazy='dynamic'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.title)
+        return 'Post:{}'.format(self.title)
 
 class Tag(db.Model):
     """Represents Proected tags."""
@@ -82,7 +82,7 @@ class Tag(db.Model):
         self.name = name
 
     def __repr__(self):
-        return "<Model Tag `{}`>".format(self.name)
+        return "Model Tag: `{}`".format(self.name)
 
 
 class Comment(db.Model):
@@ -95,7 +95,7 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer,db.ForeignKey('post.id', ondelete='CASCADE'))
 
     def __repr__(self):
-        return '<Model Comment `{}`>'.format(self.id)
+        return 'Model Comment: `{}`'.format(self.id)
 
 @login.user_loader
 def load_user(id):

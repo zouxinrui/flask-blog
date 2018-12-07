@@ -14,10 +14,10 @@
     {% if title %}
     <title>{{ title }}</title>
     {% else %}
-    <title>homepage</title>
+    <title>LoftBlog</title>
     {% endif %}
-
 </head>
+{% block info %} {% endblock %}
 <body class="backimg">
     <header class="header1 trans">
         <nav class="navbar navbar-inverse coloro backcol bodercol " role="navigation">
@@ -29,10 +29,10 @@
                         <span class="icon-bar coloro "></span>
                         <span class="icon-bar coloro "></span>
                     </button>
-                    <a class="navbar-brand" href="/"><span class="glyphicon glyphicon-home coloro trans"> Loft&Blog</span></a>
+                    <a class="navbar-brand fontmy" href="/"><span class="glyphicon glyphicon-home coloro trans"> Loft&Blog</span></a>
                 </div>
                 <div class="collapse navbar-collapse" id="example-navbar-collapse">
-                    <ul class="nav navbar-nav navbar-right fontmy">
+                    <ul class="nav navbar-nav navbar-right">
                         <li><a href="/new_post"><span class="glyphicon glyphicon-plus coloro trans"> New post</span></a></li>
                         {% if current_user.is_anonymous %}
                         <li><a href="/login"><span class="coloro trans">Login</span></a></li>
@@ -67,8 +67,9 @@
         </div>
         {% endfor %} {% endif %} {% endwith %} {% block content %} {% endblock %}
     </div>
-
-
+<div class="container-fluid up-m">
+       <center>copyright</center>
+</div>
 </body>
 
 </html>

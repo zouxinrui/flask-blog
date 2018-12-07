@@ -8,7 +8,7 @@ admin_permission = Permission(RoleNeed('admin')) # 表示满足role有admin的�
 user_permission = Permission(UserNeed('id'))
 ##################################################################################
 import logging
-# logging.basicConfig(filename="log.txt",format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
+# logging.basicConfig(filename="logs/system.log",format='%(asctime)s - %(levelname)s - %(filename)s - %(message)s',level=logging.INFO)
 ##################################################################################
 
 app = Flask(__name__)
@@ -18,7 +18,7 @@ login = LoginManager(app)
 Principal(app)
 login.login_view = 'login'
 ##############################################################################3
-handler = logging.FileHandler('flask2.log', encoding='UTF-8')
+handler = logging.FileHandler('logs/operation.log', encoding='UTF-8')
 handler.setLevel(logging.INFO)
 logging_format = logging.Formatter(
     '%(asctime)s - %(levelname)s - %(message)s')

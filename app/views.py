@@ -20,7 +20,7 @@ class MyAdminIndexView(AdminIndexView):
     def inaccessible_callback(self, name, **kwargs):
         flash("You have no authority to access this page!")
         if current_user.is_authenticated:
-             app.logger.warning('"%s"is try to access the admin page')
+             app.logger.warning('"%s"is try to access the admin page',current_user.username)
              return redirect(url_for('index', next=request.url))
         else:
             app.logger.warning('Anonymous usr tried to access the background')
@@ -42,19 +42,30 @@ class MyAdminIndexView(AdminIndexView):
 admin = Admin(app,template_mode='bootstrap3',
                   index_view=MyAdminIndexView())
 
-class MyView(ModelView):
+
+class MyViewAll(ModelView):
+    def after_model_delete(self, model):
+        app.logger.info('Admin "%s" deleted the "%s"',current_user.username, model)
+
+    def after_model_change(self, form, model, is_create):
+        app.logger.info('Admin "%s" updated the "%s"', current_user.username, model)
+
+
+class MyView(MyViewAll):
     column_exclude_list = ('password_hash')
     form_excluded_columns = ('posts', 'comments')
 
 
-class MyViewpost(ModelView):
+class MyViewpost(MyViewAll):
     form_excluded_columns = ('comments')
+    page_size = 6
 
 
 admin.add_view(MyView(User, db.session))
 admin.add_view(MyViewpost(Post, db.session))
-admin.add_view(ModelView(Comment, db.session))
-admin.add_view(ModelView(Tag, db.session))
+admin.add_view(MyViewAll(Comment, db.session))
+admin.add_view(MyViewAll(Tag, db.session))
+
 
 
 @app.route('/')
@@ -89,36 +100,46 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
-    #对表格数据进行验证
+    # Check the form data
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Valid username or password')
+            flash('Invalid username or password')
+            # log information
+            app.logger.info('"%s" logged in failed', form.username.data)
             return redirect(url_for('login'))
         identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
         login_user(user, remember=form.remember_me.data)
 
         #log information
-        app.logger.info('%s logged in successfully', user.username)
+        app.logger.info('"%s" logged in successfully', user.username)
 
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
-    return render_template('user/login.html',title='登录',form=form)
+    return render_template('user/login.html',title='Login',form=form)
 
 
 @app.route('/logout')
 def logout():
-    logout_user()
-    # Remove session keys set by Flask-Principal
-    for key in ('identity.name', 'identity.auth_type'):
-        session.pop(key, None)
+    try:
+        # log information
+        app.logger.info('"%s" logged out successfully', current_user.username)
+        logout_user()
+        # Remove session keys set by Flask-Principal
+        for key in ('identity.name', 'identity.auth_type'):
+            session.pop(key, None)
+        # Tell Flask-Principal the user is anonymous
+        identity_changed.send(current_app._get_current_object(),
+                              identity=AnonymousIdentity())
+        return redirect(url_for('index'))
+    except Exception as e:
+        # log information
+        app.logger.info('"%s" logged out failed', current_user.username)
+        flash("Logout failed")
+        redirect(url_for('index'))
 
-    # Tell Flask-Principal the user is anonymous
-    identity_changed.send(current_app._get_current_object(),
-                          identity=AnonymousIdentity())
-    return redirect(url_for('index'))
 
 @app.route('/cookies')
 def privacy():
@@ -142,6 +163,8 @@ def register():
         db.session.add(userrole)
         db.session.commit()
         flash('Welcome to join us!')
+        # log information
+        app.logger.info('"%s" registered successfully', user.username)
         return redirect(url_for('login'))
     return render_template('user/register.html', title='register', form=form)
 
@@ -232,6 +255,8 @@ def edit_post(id):
     form = PostForm()
 
     if post.author.id != current_user.id:
+        # log information
+        app.logger.warning('"%s" tried to edit post "%s" with no authority', current_user.username, post.title)
         flash ("You have no authority to edit")
         return redirect(url_for('index'))
 
