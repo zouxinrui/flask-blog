@@ -5,11 +5,13 @@ from flask_login import UserMixin
 from app import login
 from hashlib import md5
 
+
 class UserRole(db.Model):
     __tablename__ = 'userroles'
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True, nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), primary_key=True, nullable=False)
+
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -21,14 +23,16 @@ class Role(db.Model):
     def __repr__(self):
         return self.role_name
 
+
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
+
     id = db.Column(db.Integer,primary_key=True)
     about_me = db.Column(db.String(180))
     username = db.Column(db.String(64),index=True,unique=True)
     email = db.Column(db.String(100),index=True,unique=True)
     password_hash = db.Column(db.String(128))
-    posts = db.relationship('Post',backref='author',lazy='dynamic', cascade="all, delete, delete-orphan", passive_deletes = True)
+    posts = db.relationship('Post',backref='author',lazy='dynamic', cascade="all, delete-orphan", passive_deletes=True)
     roles = db.relationship('Role', secondary="userroles", back_populates='users')
     comments = db.relationship(
         'Comment',
@@ -48,12 +52,15 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
+
 posts_tags = db.Table('posts_tags',
     db.Column('post_id', db.Integer, db.ForeignKey('post.id', ondelete='CASCADE')),
     db.Column('tag_id', db.Integer, db.ForeignKey('tags.id')))
 
+
 class Post(db.Model):
     __tablename__ = 'post'
+
     id = db.Column(db.Integer,primary_key=True)
     body = db.Column(db.String())
     title = db.Column(db.Text(255))
@@ -62,7 +69,7 @@ class Post(db.Model):
     comments = db.relationship(
         'Comment',
         backref='posts',
-        lazy='dynamic', cascade="all, delete, delete-orphan", passive_deletes = True)
+        lazy='dynamic', cascade="all, delete-orphan", passive_deletes=True)
     tags = db.relationship(
         'Tag',
         secondary=posts_tags,
@@ -73,8 +80,8 @@ class Post(db.Model):
 
 class Tag(db.Model):
     """Represents Proected tags."""
-
     __tablename__ = 'tags'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
 
@@ -88,6 +95,7 @@ class Tag(db.Model):
 class Comment(db.Model):
     """Represents Proected comments."""
     __tablename__ = 'comments'
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db .Column(db.Integer,db.ForeignKey('user.id', ondelete='CASCADE'))
     text = db.Column(db.Text())

@@ -83,3 +83,9 @@
 2018-12-07 18:03:14,819 - INFO - _internal.py - 127.0.0.1 - - [07/Dec/2018 18:03:14] "GET /login HTTP/1.1" 200 -
 2018-12-07 18:03:40,172 - INFO - _internal.py -  * Detected change in 'F:\\flask\\coursework\\sc16xz\\app\\__init__.py', reloading
 2018-12-07 18:03:40,873 - INFO - _internal.py -  * Restarting with stat
+2018-12-08 13:49:38,256 - WARNING - _internal.py -  * Debugger is active!
+2018-12-08 13:51:08,499 - WARNING - _internal.py -  * Debugger is active!
+2018-12-08 13:53:16,314 - WARNING - _internal.py -  * Debugger is active!
+2018-12-08 13:54:16,454 - WARNING - _internal.py -  * Debugger is active!
+2018-12-08 13:55:11,031 - WARNING - _internal.py -  * Debugger is active!
+2018-12-08 13:57:19,152 - WARNING - _internal.py -  * Debugger is active!

@@ -1,13 +1,4 @@
-2018-12-07 10:49:40,893 - INFO - "Xinrui_Jiu" logged in successfully
-2018-12-07 10:52:31,711 - INFO - "Xinrui_Jiu" has post a new post "UX inspection of GitHub"
-2018-12-07 10:52:32,019 - INFO - "Xinrui_Jiu" has post a new post "UX inspection of GitHub"
-2018-12-07 11:08:18,060 - INFO - "liu" logged in failed
-2018-12-07 11:08:47,967 - INFO - "Xinrui_Jiu" logged in successfully
-2018-12-07 11:12:51,931 - INFO - "Xinrui_Jiu" logged out successfully
-2018-12-07 21:04:02,529 - INFO - "Xinrui_Jiu" logged in successfully
-2018-12-07 21:05:43,825 - WARNING - Admin "Xinrui_Jiu" deleted the "<Username:liu11>"
-2018-12-07 21:05:48,209 - WARNING - Admin "Xinrui_Jiu" deleted the "<Username:45>"
-2018-12-07 21:07:19,497 - WARNING - Admin "Xinrui_Jiu" deleted the "User:WE"
-2018-12-07 21:13:53,282 - INFO - Admin "Xinrui_Jiu" created the "User:liu"
-2018-12-07 21:14:11,296 - INFO - Admin "Xinrui_Jiu" created the "User:liu"
-2018-12-07 21:14:32,334 - INFO - Admin "Xinrui_Jiu" created the "User:Mary"
+2018-12-08 13:39:37,415 - INFO - [127.0.0.1]: "Xinrui_Jiu" has edited profile
+2018-12-08 13:57:58,762 - INFO - [127.0.0.1]: "Xinrui_Jiu" has post a new post "Lisao"
+2018-12-08 13:58:41,150 - INFO - [127.0.0.1]: "Xinrui_Jiu" logged out successfully
+2018-12-08 13:58:48,681 - WARNING - [127.0.0.1]: Anonymous usr tried to access the background

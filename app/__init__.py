@@ -3,34 +3,51 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_principal import Principal, Permission, RoleNeed, identity_loaded,UserNeed
 from flask_login import current_user
-principals = Principal()  # 实例化一个Principal对象
-admin_permission = Permission(RoleNeed('admin')) # 表示满足role有admin的用户才能够有权限
-user_permission = Permission(UserNeed('id'))
-##################################################################################
 import logging
-# logging.basicConfig(filename="logs/system.log",format='%(asctime)s - %(levelname)s - %(filename)s - %(message)s',level=logging.INFO)
-##################################################################################
+from flask import request
+from .momentjs import momentjs
 
+# Initial principals
+principals = Principal()
+admin_permission = Permission(RoleNeed('admin'))
+user_permission = Permission(UserNeed('id'))
+# Initial app
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 login = LoginManager(app)
 Principal(app)
 login.login_view = 'login'
-##############################################################################3
-handler = logging.FileHandler('logs/operation.log', encoding='UTF-8')
-handler.setLevel(logging.INFO)
-logging_format = logging.Formatter(
-    '%(asctime)s - %(levelname)s - %(message)s')
-handler.setFormatter(logging_format)
-app.logger.addHandler(handler)
-###############################################################################
-from .momentjs import momentjs
-app.jinja_env.globals['momentjs'] = momentjs
-
 from app import views, models
 
 
+# Configuration of logger
+class RequestFormatter(logging.Formatter):
+    def format(self, record):
+        record.url = request.url
+        record.remote_addr = request.remote_addr
+        return super(RequestFormatter, self).format(record)
+
+
+formatter = RequestFormatter(
+    '%(asctime)s - %(levelname)s - [%(remote_addr)s]: %(message)s'
+)
+
+handler = logging.FileHandler('logs/operation.log', encoding='UTF-8')
+handler.setLevel(logging.INFO)
+handler.setFormatter(formatter)
+app.logger.addHandler(handler)
+
+logging.basicConfig(filename="logs/system.log",
+                    format='%(asctime)s - %(levelname)s - %(filename)s - %(message)s',
+                    level=logging.WARN)
+
+
+# Set time format
+app.jinja_env.globals['momentjs'] = momentjs
+
+
+# Add identity to current user
 @identity_loaded.connect_via(app)
 def on_identity_loaded(sender, identity):
     # Set the identity user object

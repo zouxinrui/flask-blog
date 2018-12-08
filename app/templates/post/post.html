@@ -35,14 +35,14 @@
             {% for comment in comments %}
                 <p><img src="{{ comment.user.avatar(32) }}">
                     <a href="{{ url_for('user', username=comment.user.username) }}">{{ comment.user.username }}</a>
-                    {{ comment.date }}</p>
+                    {{momentjs(comment.date).format('LLLL')}}</p>
             <p>{{ comment.text }}</p>
            {% endfor %}
            </div>
             <hr>
 
             <h3>New Comment:</h3>
-            <div class="container-fluid">
+            <div class="container-fluid down">
             <!-- Set the form -->
             {% if current_user.username %}
             <form method="POST" action="{{ url_for('post', post_id=post.id)}}">
@@ -52,7 +52,7 @@
                     <p class="help-block">{{ e }}</p>
                     {% endfor %} {% endif %} {{ form.text(class_='form-control',rows_="3") }}
                 </div>
-                <input class="btn btn-primary" type="submit" value="Add Comment">
+                <input class="btn btn-default" type="submit" value="Add Comment">
             </form>
             {% else %}
             <p>login need</p>

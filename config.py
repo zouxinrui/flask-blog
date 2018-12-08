@@ -1,11 +1,7 @@
 import os
 
-
-
 WTF_CSRF_ENABLED = True
 SECRET_KEY = '1BCDEFGHIJKLMNOPQRSTUVWXYZ12345'
-
-POSTS_PER_PAGE = 7
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 

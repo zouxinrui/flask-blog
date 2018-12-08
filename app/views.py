@@ -32,10 +32,12 @@ class MyAdminIndexView(AdminIndexView):
         user = User.query.count()
         posts = Post.query.count()
         tags = Tag.query.count()
+        comments = Comment.query.count()
         return self.render('admin/welcom.html',
                            users=user,
                            posts=posts,
                            tags=tags,
+                           comments=comments,
                            url = '/admin')
 
 
@@ -65,7 +67,6 @@ admin.add_view(MyView(User, db.session))
 admin.add_view(MyViewpost(Post, db.session))
 admin.add_view(MyViewAll(Comment, db.session))
 admin.add_view(MyViewAll(Tag, db.session))
-
 
 
 @app.route('/')
@@ -146,10 +147,9 @@ def privacy():
     return render_template('base/privacy.html')
 
 
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    # 判断当前用户是否验证，如果通过的话返回首页
+    # Justify the identity of user
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
